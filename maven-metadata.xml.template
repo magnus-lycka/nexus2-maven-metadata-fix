@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata modelVersion="1.1.0">
+  <groupId>{{ group_id }}</groupId>
+  <artifactId>{{ artifact_id }}</artifactId>
+  <versioning>
+    <latest>{{ latest }}</latest>
+    <release>{{ release }}</release>
+    <versions>
+{%- for version in versions %}
+      <version>{{ version }}</version>
+{%- endfor %}
+    </versions>
+    <lastUpdated>{{ timestamp }}</lastUpdated>
+  </versioning>
+</metadata>
+
