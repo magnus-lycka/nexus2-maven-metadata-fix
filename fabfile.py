@@ -2,9 +2,11 @@ import hashlib
 import jinja2
 from datetime import datetime
 from fabric.api import task, env, run, sudo, put, cd
-from os import unlink
+from os import unlink, path
 
-env.use_ssh_config = True
+
+if path.exists(path.expanduser('~/.ssh/config')):
+    env.use_ssh_config = True
 
 
 class Artifact(dict):
