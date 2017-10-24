@@ -82,7 +82,39 @@ def build_meta(directory, group_id):
 
 
 @task
+def find_dirs(parent, pattern):
+    return run(
+        "find {} -mindepth 1 -maxdepth 1 -name '{}' -type d".format(parent, pattern)
+    )
+
+
+@task
 def build_metas(dirfile, group_id):
+    """
+    Build maven metadata for Nexus 2 artifacts.
+    Needs access to file system.
+
+    :param dirfile: Text file with a list of artifact paths
+    :param group_id: Nexus group id
+    """
     with open(dirfile) as f:
         for directory in f:
             build_meta(directory.rstrip(), group_id)
+
+
+@task
+def build_metas_for(parent, pattern, group_id):
+    """
+    Build maven metadata for Nexus 2 artifacts.
+    Needs access to file system.
+
+    :param parent: Parent directory for Nexus artifacts
+    :param pattern: glob pattern for artifact names
+    :param group_id: Nexus group id
+    """
+    for directory in [
+        d for d
+        in find_dirs(parent, pattern).split()
+        if d.strip()
+    ]:
+        build_meta(directory.rstrip(), group_id)
