@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import hashlib
 import jinja2
 from datetime import datetime
@@ -72,8 +74,12 @@ def list_versions(directory):
 def build_meta(directory, group_id):
     check(directory)
     artifact_id = directory.split('/')[-1]
+    versions = list_versions(directory).split()
+    if not versions:
+        print("Found no sub-directories in", directory)
+        return
     art = Artifact(group_id, artifact_id)
-    art.versions(list_versions(directory).split())
+    art.versions(versions)
     with cd(directory):
         for fn, content in art.files().items():
             with open(fn, 'w') as f:
@@ -114,9 +120,6 @@ def build_metas_for(parent, pattern, group_id):
     :param pattern: glob pattern for artifact names
     :param group_id: Nexus group id
     """
-    for directory in [
-        d for d
-        in find_dirs(parent, pattern).split()
-        if d.strip()
-    ]:
-        build_meta(directory.rstrip(), group_id)
+    for directory in find_dirs(parent, pattern).split():
+        if directory.strip():
+            build_meta(directory.strip(), group_id)
