@@ -61,7 +61,7 @@ def find_meta(root):
 @task
 def check(directory):
     with cd(directory):
-        run("grep -q '<latest>' maven-metadata.xml")
+        run("grep -q '<release>' maven-metadata.xml")
 
 
 @task
